@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.Callbacks;
-using UnityEditor.Experimental;
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
 
 public class PlayerControl : MonoBehaviour
 {
     private Rigidbody2D rb;
     public int speed = 6;
-    public int jump_height = 5;
+    public int jump_height = 2;
     public Animator anm;
-
+    public float gravityScale = 7;
+    public float fallGravityScale = 10;
     public float h;
     public float w;
+    bool jumping;
+    float pressedButtonTime;
     public bool flip = true; //see right
     // Start is called before the first frame update
     void Start()
@@ -28,8 +28,6 @@ public class PlayerControl : MonoBehaviour
     {
         h = Input.GetAxisRaw("Horizontal");//-1, 0, 1
         rb.velocity = new Vector2(speed * h, rb.velocity.y);
-        if (rb.velocity.x < 0)
-            rb.velocity.Set(0, rb.velocity.y);
         if (flip && h == -1)
         {
             transform.localScale = new Vector3(-1, 1, 1);
@@ -40,11 +38,30 @@ public class PlayerControl : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1);
             flip = true;
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        float buttonPressWindow = 1;
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + jump_height);
-            anm.SetFloat("Jump", 1);
+            rb.gravityScale = gravityScale;
+            float jumpForce = Mathf.Sqrt(jump_height * (Physics2D.gravity.y * gravityScale) * -2) * rb.mass;
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            jumping = true;
+            pressedButtonTime = 0;
+
         }
+        if (jumping)
+        {
+            pressedButtonTime += Time.deltaTime;
+            if (pressedButtonTime < buttonPressWindow && Input.GetKeyUp(KeyCode.Space))
+            {
+                rb.gravityScale = fallGravityScale;
+            }
+            if (rb.velocity.y < 0)
+            {
+                rb.gravityScale = fallGravityScale;
+                jumping = false;
+            }
+        }
+        anm.SetFloat("Jump", Mathf.Abs(w));
         anm.SetFloat("Move", Mathf.Abs(h));
     }
 }
