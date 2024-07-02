@@ -27,6 +27,7 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         h = Input.GetAxisRaw("Horizontal");//-1, 0, 1
+        w = Input.GetAxisRaw("Vertical"); //-1 0 1
         rb.velocity = new Vector2(speed * h, rb.velocity.y);
         if (flip && h == -1)
         {
@@ -38,29 +39,29 @@ public class PlayerControl : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1);
             flip = true;
         }
-        float buttonPressWindow = 1;
+        //float buttonPressWindow = 1;
         if (Input.GetKeyDown(KeyCode.W))
         {
             rb.gravityScale = gravityScale;
             float jumpForce = Mathf.Sqrt(jump_height * (Physics2D.gravity.y * gravityScale) * -2) * rb.mass;
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumping = true;
-            pressedButtonTime = 0;
+            //pressedButtonTime = 0;
 
         }
-        if (jumping)
-        {
-            pressedButtonTime += Time.deltaTime;
-            if (pressedButtonTime < buttonPressWindow && Input.GetKeyUp(KeyCode.Space))
-            {
-                rb.gravityScale = fallGravityScale;
-            }
-            if (rb.velocity.y < 0)
-            {
-                rb.gravityScale = fallGravityScale;
-                jumping = false;
-            }
-        }
+        // if (jumping)
+        // {
+        //     pressedButtonTime += Time.deltaTime;
+        //     if (pressedButtonTime < buttonPressWindow && Input.GetKeyUp(KeyCode.Space))
+        //     {
+        //         rb.gravityScale = fallGravityScale;
+        //     }
+        //     if (rb.velocity.y < 0)
+        //     {
+        //         rb.gravityScale = fallGravityScale;
+        //         jumping = false;
+        //     }
+        // }
         anm.SetFloat("Jump", Mathf.Abs(w));
         anm.SetFloat("Move", Mathf.Abs(h));
     }
