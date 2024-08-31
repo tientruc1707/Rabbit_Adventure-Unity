@@ -23,10 +23,6 @@ public class healthBar : MonoBehaviour
         {
             HpSlider.value = HpValue;
         }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            HpValue -= 10;
-        }
         if (HpSlider.value != EaseHpSlider.value)
         {
             EaseHpSlider.value = Mathf.Lerp(EaseHpSlider.value, HpValue, Time.deltaTime);

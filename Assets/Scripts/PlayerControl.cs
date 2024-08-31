@@ -6,63 +6,76 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    private Rigidbody2D rb;
-    public int speed = 6;
-    public int jump_height = 2;
-    public Animator anm;
-    public float gravityScale = 7;
-    public float fallGravityScale = 10;
-    public float h;
-    public float w;
-    bool jumping;
-    float pressedButtonTime;
-    public bool flip = true; //see right
-    // Start is called before the first frame update
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator anm;
+    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private Transform Camera;
+    [SerializeField] private float _speed = 5, _jumpForce = 250, moveX;
+    private bool _isGround;
+    private Vector2 movement;
+    private Vector3 pos;
 
+
+    // void Start()
+    // {
+    //     rb = this.GetComponent<Rigidbody2D>();
+    //     anm = this.GetComponent<Animator>();
+    //     sprite = this.GetComponent<SpriteRenderer>();
+    //     pos = Camera.position;
+    // }
+    void OnDrawGizmos()
+    {
+        rb = this.GetComponent<Rigidbody2D>();
+        anm = this.GetComponent<Animator>();
+        sprite = this.GetComponent<SpriteRenderer>();
+        pos = Camera.position;
+    }
     // Update is called once per frame
     void Update()
     {
-        h = Input.GetAxisRaw("Horizontal");//-1, 0, 1
-        w = Input.GetAxisRaw("Vertical"); //-1 0 1
-        rb.velocity = new Vector2(speed * h, rb.velocity.y);
-        if (flip && h == -1)
+        _moveX();
+        _Jump();
+    }
+    private void FixedUpdate()
+    {
+        rb.velocity = movement;
+        pos = this.transform.position;
+        pos.z = -10;
+        pos.y = Camera.position.y;
+        Camera.position = pos;
+    }
+    void _moveX()
+    {
+        moveX = Input.GetAxisRaw("Horizontal");
+        movement.x = moveX * _speed;
+        movement.y = rb.velocity.y;
+        if (moveX == -1)
+            sprite.flipX = true;
+        if (moveX == 1)
+            sprite.flipX = false;
+        anm.SetFloat("Move", Mathf.Abs(moveX));
+    }
+    void _Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.W) && _isGround)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
-            flip = false;
+            rb.AddForce(new(0, _jumpForce));
         }
-        if (!flip && h == 1)
+        if (!_isGround)
         {
-            transform.localScale = new Vector3(1, 1, 1);
-            flip = true;
+            anm.SetFloat("Jump", 1);
         }
-        //float buttonPressWindow = 1;
-        if (Input.GetKeyDown(KeyCode.W))
+        else
         {
-            rb.gravityScale = gravityScale;
-            float jumpForce = Mathf.Sqrt(jump_height * (Physics2D.gravity.y * gravityScale) * -2) * rb.mass;
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            jumping = true;
-            //pressedButtonTime = 0;
-
+            anm.SetFloat("Jump", -1);
         }
-        // if (jumping)
-        // {
-        //     pressedButtonTime += Time.deltaTime;
-        //     if (pressedButtonTime < buttonPressWindow && Input.GetKeyUp(KeyCode.Space))
-        //     {
-        //         rb.gravityScale = fallGravityScale;
-        //     }
-        //     if (rb.velocity.y < 0)
-        //     {
-        //         rb.gravityScale = fallGravityScale;
-        //         jumping = false;
-        //     }
-        // }
-        anm.SetFloat("Jump", Mathf.Abs(w));
-        anm.SetFloat("Move", Mathf.Abs(h));
+    }
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        _isGround = true;
+    }
+    void OnCollisionExit2D(Collision2D other)
+    {
+        _isGround = false;
     }
 }

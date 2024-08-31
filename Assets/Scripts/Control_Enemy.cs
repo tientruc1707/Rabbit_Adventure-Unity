@@ -1,52 +1,58 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Control_Enemy : MonoBehaviour
 {
     // Start is called before the first frame update
-    private Rigidbody2D EnemyRb;
-    private Animator EnemyAnimator;
-    private bool onRange = false;
-    private float detectRange = 5f;
-    private float ESpeed = 2f;
-
-    public Transform Player;
+    [SerializeField] private Rigidbody2D eRigid;
+    [SerializeField] private Animator eAnm;
+    [SerializeField] private Collider2D eCollider;
+    [SerializeField] private Transform pTransform;
+    [SerializeField] private Collider2D pCollider;
+    [SerializeField] private SpriteRenderer eSprite;
+    private bool _onRange = false;
+    private float _detectRange = 5f;
+    private float _eSpeed = 2f;
+    private GameObject Eobject;
 
     void Start()
     {
-        EnemyRb = GetComponent<Rigidbody2D>();
-        EnemyAnimator = GetComponent<Animator>();
+        eRigid = this.GetComponent<Rigidbody2D>();
+        eAnm = this.GetComponent<Animator>();
+        eCollider = this.GetComponent<Collider2D>();
+        eSprite = this.GetComponent<SpriteRenderer>();
+        eCollider.gameObject.tag = "Enemy";
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 p = Player.position;
+        Vector2 p = pTransform.position;
         Vector2 e = transform.position;
         float distance = Vector2.Distance(e, p);
-        //Khoang cach va kiem tra duong thang
-        if (distance <= detectRange && Math.Round(e.y, 4) == Math.Round(p.y, 4))
+        if (distance <= _detectRange && Math.Round(e.y, 4) == Math.Round(p.y, 4))
         {
-            onRange = true;
+            _onRange = true;
             Vector2 direction = (p - e).normalized;
-            EnemyRb.velocity = direction * ESpeed;
+            eRigid.velocity = direction * _eSpeed;
             if (p.x < e.x)
             {
-                transform.localScale = new Vector3(1, 1, 1);
+                eSprite.flipX = false;
             }
             else
             {
-                transform.localScale = new Vector3(-1, 1, 1);
+                eSprite.flipX = true;
             }
         }
         else
         {
-            onRange = false;
-            EnemyRb.velocity = Vector2.zero;
+            _onRange = false;
+            eRigid.velocity = Vector2.zero;
         }
-        EnemyAnimator.SetBool("OnRange", onRange);
+        eAnm.SetBool("OnRange", _onRange);
     }
 }
