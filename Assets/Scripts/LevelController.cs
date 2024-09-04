@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,13 +10,13 @@ public class LevelController : MonoBehaviour
         buttons = this.GetComponentsInChildren<Button>();
         for (int i = 0; i < buttons.Length; ++i)
         {
-            string levelIndex = (i + 1).ToString();
-            buttons[i].onClick.AddListener(() => loadLevel(levelIndex));
+            string levelNum = (i + 1).ToString();
+            buttons[i].onClick.AddListener(() => loadLevel(levelNum));
         }
     }
-    void loadLevel(string level)
+    void loadLevel(string levelNum)
     {
-        SceneManager.LoadScene("Level " + level);
+        SceneManager.LoadScene("Level " + levelNum);
     }
     private void OnDrawGizmosSelected()
     {

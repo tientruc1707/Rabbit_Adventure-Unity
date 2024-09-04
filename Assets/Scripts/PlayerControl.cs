@@ -10,72 +10,80 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private Animator anm;
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Transform Camera;
-    [SerializeField] private float _speed = 5, _jumpForce = 250, moveX;
-    private bool _isGround;
+    [SerializeField] private Collider2D colD;
+    [SerializeField] private float speed = 10f, jumpForce = 5f, moveX;
+    private bool jump = false;
     private Vector2 movement;
     private Vector3 pos;
 
 
-    // void Start()
-    // {
-    //     rb = this.GetComponent<Rigidbody2D>();
-    //     anm = this.GetComponent<Animator>();
-    //     sprite = this.GetComponent<SpriteRenderer>();
-    //     pos = Camera.position;
-    // }
-    void OnDrawGizmos()
+    void Start()
     {
         rb = this.GetComponent<Rigidbody2D>();
         anm = this.GetComponent<Animator>();
         sprite = this.GetComponent<SpriteRenderer>();
+        colD = this.GetComponent<Collider2D>();
         pos = Camera.position;
     }
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        _moveX();
-        _Jump();
+        if (Input.GetKeyDown(KeyCode.W))
+            jump = true;
     }
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        rb.velocity = movement;
-        pos = this.transform.position;
-        pos.z = -10;
+        MoveX();
+        CameraFollow();
+        Jump();
+    }
+    void CameraFollow()
+    {
+        Vector3 pos = this.transform.position;
         pos.y = Camera.position.y;
+        pos.z = -10;
         Camera.position = pos;
     }
-    void _moveX()
+    void MoveX()
     {
         moveX = Input.GetAxisRaw("Horizontal");
-        movement.x = moveX * _speed;
-        movement.y = rb.velocity.y;
+        rb.velocity = new Vector2(moveX * speed, rb.velocity.y > -4.0f ? rb.velocity.y : -4.0f);
         if (moveX == -1)
             sprite.flipX = true;
         if (moveX == 1)
             sprite.flipX = false;
         anm.SetFloat("Move", Mathf.Abs(moveX));
     }
-    void _Jump()
+    void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.W) && _isGround)
+        if (Grounded())
         {
-            rb.AddForce(new(0, _jumpForce));
+            anm.SetFloat("Jump", -1);
+            if (jump)
+            {
+                rb.velocity = new(rb.velocity.x, jumpForce);
+            }
+            jump = false;
         }
-        if (!_isGround)
-        {
+        else
             anm.SetFloat("Jump", 1);
+    }
+    bool Grounded()
+    {
+        float rayLength = 0.5f;
+        Color rayColor = Color.red;
+        Vector2 startPos = (Vector2)this.transform.position - new Vector2(0, colD.bounds.extents.y + 0.05f);
+        int layerMask = LayerMask.GetMask("Ground");
+        RaycastHit2D hit = Physics2D.Raycast(startPos, Vector2.down, rayLength, layerMask);
+        if (hit.collider != null)
+        {
+            rayColor = Color.black;
         }
         else
         {
-            anm.SetFloat("Jump", -1);
+            rayColor = Color.red;
         }
-    }
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        _isGround = true;
-    }
-    void OnCollisionExit2D(Collision2D other)
-    {
-        _isGround = false;
+        Debug.DrawRay(startPos, Vector2.down * rayLength, rayColor);
+        return hit.collider != null;
     }
 }

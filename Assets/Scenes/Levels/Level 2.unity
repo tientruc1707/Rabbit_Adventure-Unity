@@ -643,12 +643,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 879021597}
     - target: {fileID: 3119107432538408118, guid: 5c54bc60b5c1470469b6f0f43e703ece, type: 3}
+      propertyPath: colD
+      value: 
+      objectReference: {fileID: 1577615399}
+    - target: {fileID: 3119107432538408118, guid: 5c54bc60b5c1470469b6f0f43e703ece, type: 3}
       propertyPath: Camera
       value: 
       objectReference: {fileID: 199045378}
     - target: {fileID: 3119107432538408118, guid: 5c54bc60b5c1470469b6f0f43e703ece, type: 3}
       propertyPath: _speed
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3119107432538408118, guid: 5c54bc60b5c1470469b6f0f43e703ece, type: 3}
       propertyPath: camera
@@ -660,7 +664,7 @@ PrefabInstance:
       objectReference: {fileID: 879021598}
     - target: {fileID: 3119107432538408118, guid: 5c54bc60b5c1470469b6f0f43e703ece, type: 3}
       propertyPath: _jumpForce
-      value: 250
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5415529159911390530, guid: 5c54bc60b5c1470469b6f0f43e703ece, type: 3}
       propertyPath: m_UpdateMode
@@ -757,7 +761,7 @@ GameObject:
   - component: {fileID: 1349438148}
   - component: {fileID: 1349438150}
   - component: {fileID: 1349438149}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Map2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3285,6 +3289,11 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!61 &1577615399 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 7118433167331083254, guid: 5c54bc60b5c1470469b6f0f43e703ece, type: 3}
+  m_PrefabInstance: {fileID: 1198538712}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1760902996
 GameObject:
   m_ObjectHideFlags: 0
