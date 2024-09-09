@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 2185291706482761687}
   - component: {fileID: 7118433167331083254}
   - component: {fileID: 3119107432538408118}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7779394896171873135}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.7, y: -1.55, z: 0}
+  m_LocalPosition: {x: 0, y: -0.06, z: -4.151199}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -74,8 +74,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -622908449
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -6447722072507503168, guid: 10f3cacccb0c4c547be76836eba20664, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -101,7 +101,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d77281aa2224f834ea6045f6a40af0e1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -168,7 +168,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.05323887, y: 0.0007877946}
+  m_Offset: {x: -0.05323887, y: 0.012091756}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -179,7 +179,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.82261276, y: 0.9984244}
+  m_Size: {x: 0.82261276, y: 0.9758165}
   m_EdgeRadius: 0
 --- !u!114 &3119107432538408118
 MonoBehaviour:
@@ -196,6 +196,8 @@ MonoBehaviour:
   rb: {fileID: 2185291706482761687}
   anm: {fileID: 5415529159911390530}
   sprite: {fileID: 7444390367825189589}
-  _speed: 0
-  _jumpForce: 0
+  Camera: {fileID: 0}
+  colD: {fileID: 7118433167331083254}
+  speed: 7
+  jumpForce: 5
   moveX: 0

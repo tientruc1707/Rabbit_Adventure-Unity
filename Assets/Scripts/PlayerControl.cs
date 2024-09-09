@@ -11,7 +11,7 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private SpriteRenderer sprite;
     [SerializeField] private Transform Camera;
     [SerializeField] private Collider2D colD;
-    [SerializeField] private float speed = 10f, jumpForce = 5f, moveX;
+    [SerializeField] private float speed = 7f, jumpForce = 5f, moveX;
     private bool jump = false;
     private Vector2 movement;
     private Vector3 pos;
@@ -23,7 +23,7 @@ public class PlayerControl : MonoBehaviour
         anm = this.GetComponent<Animator>();
         sprite = this.GetComponent<SpriteRenderer>();
         colD = this.GetComponent<Collider2D>();
-        pos = Camera.position;
+        Camera.position = new(0, 0);
     }
     // Update is called once per frame
     private void Update()
@@ -42,7 +42,8 @@ public class PlayerControl : MonoBehaviour
         Vector3 pos = this.transform.position;
         pos.y = Camera.position.y;
         pos.z = -10;
-        Camera.position = pos;
+        if (pos.x >= 0)
+            Camera.position = pos;
     }
     void MoveX()
     {
@@ -70,7 +71,7 @@ public class PlayerControl : MonoBehaviour
     }
     bool Grounded()
     {
-        float rayLength = 0.5f;
+        float rayLength = 1f;
         Color rayColor = Color.red;
         Vector2 startPos = (Vector2)this.transform.position - new Vector2(0, colD.bounds.extents.y + 0.05f);
         int layerMask = LayerMask.GetMask("Ground");

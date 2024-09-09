@@ -2,38 +2,24 @@ using UnityEngine;
 
 public class MapController : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer[] Bgs;
-    [SerializeField] private Transform player;
+    [SerializeField] private SpriteRenderer Bg;
+    [SerializeField] private Transform cam;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        Bg = this.GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        Bgs = this.GetComponentsInChildren<SpriteRenderer>();
-        for (int i = 0; i < Bgs.Length; ++i)
-        {
-            Vector2 pos = Bgs[i].transform.position;
-            if (player.position.x - pos.x != Bgs[i].sprite.texture.width / 16f / 3)
-            {
-                pos.x = player.position.x;
-                Bgs[i].transform.position = pos;
-            }
-        }
+        Vector3 pos = cam.position;
+        pos.z = 0;
+        this.transform.position = pos;
     }
-    void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        Bgs = this.GetComponentsInChildren<SpriteRenderer>();
-        for (int i = 0; i < Bgs.Length; ++i)
-        {
-            Bgs[i].sortingLayerName = "Background";
-            Bgs[i].sortingOrder = i;
-            Bgs[i].drawMode = SpriteDrawMode.Tiled;
-            Bgs[i].tileMode = SpriteTileMode.Adaptive;
-        }
+        Bg.sortingLayerName = "Backgroud";
     }
 }
